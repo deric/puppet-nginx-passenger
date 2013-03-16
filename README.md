@@ -44,7 +44,7 @@ You can easily configure a virtual hosts. An example is:
 
 ```
 nginx::vhost { 'www.example.com':
-	port => '8080'
+	port => '8080',
 	rails => true,
 }
 ```
