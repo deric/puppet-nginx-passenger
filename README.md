@@ -32,8 +32,11 @@ A custom installation might look like this:
 ``` 
 node webserver { 
     class { 'nginx':
-	 $installdir => '/usr/local/nginx',
-	 $logdir     => '/usr/local/logs/nginx',
+      ruby_version      => 'ruby-1.9.3-p392',
+      passenger_version => '3.0.19',
+      www               => '/var/www',
+      installdir        => '/usr/local/nginx',
+   	  logdir            => '/usr/local/logs/nginx',
     }
 }
 ```
@@ -44,8 +47,9 @@ You can easily configure a virtual hosts. An example is:
 
 ```
 nginx::vhost { 'www.example.com':
-	port => '8080',
+	port  => '8080',
 	rails => true,
+  root  => '/var/www/example',
 }
 ```
 The _rails_ attribute is optional and set to false by default. However, if you want to deploy a rails app, use this attribute and the rails template will be used instead.
