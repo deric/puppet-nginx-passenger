@@ -9,19 +9,6 @@ This is a fork of [puppet-nginx](https://bitbucket.org/sgmac/puppet-nginx) to in
 
 Nginx is installed with usage of [puppet-rvm](https://github.com/blt04/puppet-rvm). Please, read the documentation before you begin. 
 
-This module has been tested on:
-
-    - Debian Squeeze 6.0.5, Puppet 3.1.0
-
-
-For custom types, do not forget to enable pluginsync: 
-
-```
-[main]
-pluginsync = true
-
-```
-
 ### Basic usage
 
 Install nginx with
@@ -74,6 +61,23 @@ nginx::vhost { 'www.example.com':
 }
 ```
 The _rails_ attribute is optional and set to false by default. However, if you want to deploy a rails app, use this attribute and the rails template will be used instead.
+
+### Supported systems
+
+This module has been tested on:
+
+  - Debian Squeeze 6.0.5, Puppet 3.1.0
+
+
+For custom types, do not forget to enable pluginsync:
+
+```
+[main]
+pluginsync = true
+
+```
+
+
 
 ### MIT License 
 
