@@ -61,7 +61,7 @@ class nginx (
       command => "bash -l -i -c \"/usr/local/rvm/gems/${ruby_version}/bin/passenger-install-nginx-module ${options}\"",
       group   => 'root',
       unless  => "test -d ${installdir}",
-      require => [ Package[$passenger_deps], Rvm_system_ruby[$ruby_version], Rvm_gem["${ruby_version}/passenger"]];
+      require => [ Rvm_system_ruby[$ruby_version], Rvm_gem["${ruby_version}/passenger"]];
     }
 
     file { 'nginx-config':
