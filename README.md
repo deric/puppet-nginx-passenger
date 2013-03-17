@@ -1,10 +1,16 @@
 ## Puppet Nginx Module
 
-This is a fork of [puppet-nginx](https://bitbucket.org/sgmac/puppet-nginx) to install nginx withi passenger using default ruby version on Debian Wheezy or Ubuntu Quantal.
+This is a fork of [puppet-nginx](https://bitbucket.org/sgmac/puppet-nginx) to install [nginx](http://nginx.org/) with [passenger](https://www.phusionpassenger.com/) using default Ruby version.
 
-This module installs Nginx using [puppet-rvm](https://github.com/blt04/puppet-rvm). Please, read the documentation before you begin. 
+### Requires
+
+  - [puppet-rvm](https://github.com/blt04/puppet-rvm)
+  - Puppet 2.6.17 (or higher)
+
+Nginx is installed with usage of [puppet-rvm](https://github.com/blt04/puppet-rvm). Please, read the documentation before you begin. 
 
 This module has been tested on:
+
     - Debian Squeeze 6.0.5, Puppet 3.1.0
 
 
