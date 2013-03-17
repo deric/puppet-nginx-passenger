@@ -1,9 +1,15 @@
 ## Puppet Nginx Module
 
-This is a fork of [puppet-nginx](https://bitbucket.org/sgmac/puppet-nginx) to install nginx with
-passenger using default ruby version on debian wheezy or ubuntu quantal.
+This is a fork of [puppet-nginx](https://bitbucket.org/sgmac/puppet-nginx) to install nginx withi passenger using default ruby version on Debian Wheezy or Ubuntu Quantal.
 
-This module installs Nginx using [puppet-rvm](https://github.com/blt04/puppet-rvm). Please, read the documentation before you begin. This module has been tested on Debian Squeeze 6.0.5. For custom types, do not forget to enable pluginsync: 
+This module installs Nginx using [puppet-rvm](https://github.com/blt04/puppet-rvm). Please, read the documentation before you begin. 
+
+This module has been tested on:
+    - Debian Squeeze 6.0.5, Puppet 3.1.0
+
+
+For custom types, do not forget to enable pluginsync: 
+
 ```
 [main]
 pluginsync = true
@@ -18,14 +24,20 @@ Install nginx with
 include nginx
 ```
 
+or with parametrized class:
+
+```
+class { 'nginx': }
+```
+
 By default installs on _/opt/nginx_, there are some variables you might override
 
 ```
-$ruby_version      = 'ruby-1.9.3-p125'
-$passenger_version = '3.0.12'
+$ruby_version      = 'ruby-1.9.3-p392'
+$passenger_version = '3.0.19'
 $installdir	       = '/opt/nginx'
-$logdir		         = '/var/log/nginx'
-$www		           = '/var/www'
+$logdir	           = '/var/log/nginx'
+$www               = '/var/www'
 ```
 A custom installation might look like this:
 
@@ -37,6 +49,8 @@ node webserver {
       www               => '/var/www',
       installdir        => '/usr/local/nginx',
    	  logdir            => '/usr/local/logs/nginx',
+      extra_opts        => '--with-ipv6',
+      user              => 'www-data', # user owning www folder
     }
 }
 ```
