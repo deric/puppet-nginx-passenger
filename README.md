@@ -1,6 +1,6 @@
 ## Puppet Nginx Module
 
-This is a fork of [puppet-nginx](https://bitbucket.org/sgmac/puppet-nginx) to install [nginx](http://nginx.org/) with [passenger](https://www.phusionpassenger.com/) using default Ruby version.
+This is a fork of [puppet-nginx](https://bitbucket.org/sgmac/puppet-nginx) to install [nginx](http://nginx.org/) with [passenger](https://www.phusionpassenger.com/) using default Ruby version. Nginx is fetched from nginx website and compiled with extra parameters you specify. 
 
 ### Requires
 
@@ -28,6 +28,7 @@ By default installs on _/opt/nginx_, there are some variables you might override
 ```
 $ruby_version      = 'ruby-1.9.3-p392'
 $passenger_version = '3.0.19'
+$version           = '1.2.7'          # nginx version
 $installdir	       = '/opt/nginx'
 $logdir	           = '/var/log/nginx'
 $www               = '/var/www'
@@ -42,7 +43,7 @@ node webserver {
       www               => '/var/www',
       installdir        => '/usr/local/nginx',
    	  logdir            => '/usr/local/logs/nginx',
-      extra_opts        => '--with-ipv6',
+      extra_opts        => '--with-ipv6 --with-http_ssl_module',
       user              => 'www-data', # user owning www folder
     }
 }

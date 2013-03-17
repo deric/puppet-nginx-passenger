@@ -29,12 +29,17 @@ class nginx (
   $logdir            = '/var/log/nginx',
   $installdir        = '/opt/nginx',
   $www               = '/var/www',
-  $extra_opts        = '--with-ipv6',
+  $extra_opts        = '--with-ipv6 --with-http_ssl_module',
   $user              = 'www-data',
   $group             = 'www-data',
+  $tmp_dir           = '/tmp',
+  $version           = '1.2.7',
+  $source            = 'http://nginx.org/download',
 ) {
-
-    $options = "--auto --auto-download  --prefix=${installdir} --with-http_ssl_module ${extra_opts}"
+    $snapshot   = "nginx-${version}.tar.gz"
+    $url        = "${source}/$snapshot"
+    $source_dir = "${tmp_dir}/nginx-${version}"
+    $options    = "--auto --prefix=${installdir} --nginx-source-dir=${source_dir} --extra-configure-flags=${extra_opts}"
 
     include rvm
     
@@ -51,17 +56,36 @@ class nginx (
         ensure => $passenger_version,
     }
 
+    file {"${tmp_dir}":
+      ensure => directory,
+    }
+
     exec { 'create container':
       command => "mkdir -p ${www} && chown ${user}:${group} ${www}",
       unless  => "test -d ${www}",
       before  => Exec['nginx-install']
     }
 
+    exec { "fetch-${url}":
+      cwd     => "${tmp_dir}",
+      command => "wget ${url} -O ${tmp_dir}/${snapshot}",
+      creates => "${tmp_dir}/${snapshot}",
+      require => File["${tmp_dir}"],
+    }
+
+    exec { "untar-nginx-${version}":
+      command => "tar -xzf ${tmp_dir}/${snapshot}",
+      cwd     => "${tmp_dir}",
+      require => Exec["fetch-${url}"],
+      creates => "${tmp_dir}/nginx-${version}",
+    }
+
+
     exec { 'nginx-install':
       command => "bash -l -i -c \"/usr/local/rvm/gems/${ruby_version}/bin/passenger-install-nginx-module ${options}\"",
       group   => 'root',
       unless  => "test -d ${installdir}",
-      require => [ Rvm_system_ruby[$ruby_version], Rvm_gem["${ruby_version}/passenger"]];
+      require => [ Exec["untar-nginx-${version}"], Rvm_system_ruby[$ruby_version], Rvm_gem["${ruby_version}/passenger"]];
     }
 
     file { 'nginx-config':
