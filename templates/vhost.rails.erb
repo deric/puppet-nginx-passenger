@@ -7,6 +7,7 @@ server {
 
       passenger_enabled on;
       passenger_base_uri /;
+      rails_env <%= rails_env %>;
 
       access_log <%= scope.lookupvar('nginx::logdir') %>/<%= host %>_access.log;
       error_log  <%= scope.lookupvar('nginx::logdir') %>/<%= host %>_error.log;

@@ -25,11 +25,12 @@
 #    sever_name =>  'blog.test.com'
 # }
 define nginx::vhost(
-  $host = $name,
-  $port = '80',
-  $root    = "/var/www/${host}",
-  $makeroot = true,
-  $rails = false,
+  $host      = $name,
+  $port      = '80',
+  $root      = "/var/www/${host}",
+  $makeroot  = true,
+  $rails     = false,
+  $rails_env = 'production',
 ){
   include nginx
 

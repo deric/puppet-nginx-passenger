@@ -23,9 +23,9 @@ By default installs on _/opt/nginx_, there are some variables you might override
 ```
 $ruby_version      = 'ruby-1.9.3-p125'
 $passenger_version = '3.0.12'
-$installdir	   = '/opt/nginx'
-$logdir		   = '/var/log/nginx'
-$www		   = '/var/www'
+$installdir	       = '/opt/nginx'
+$logdir		         = '/var/log/nginx'
+$www		           = '/var/www'
 ```
 A custom installation might look like this:
 
@@ -47,9 +47,10 @@ You can easily configure a virtual hosts. An example is:
 
 ```
 nginx::vhost { 'www.example.com':
-	port  => '8080',
-	rails => true,
-  root  => '/var/www/example',
+	port      => '8080',
+	rails     => true,
+  rails_env => 'production',
+  root      => '/var/www/example',
 }
 ```
 The _rails_ attribute is optional and set to false by default. However, if you want to deploy a rails app, use this attribute and the rails template will be used instead.
