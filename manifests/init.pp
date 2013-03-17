@@ -13,6 +13,10 @@
 #      Nginx's install directory.
 #   $www
 #      Base directory for
+#   $user
+#      Owner of `www` dir
+#   $group
+#      Group of `www` dir (user running nginx should belong to this group)
 # Actions:
 #
 # Requires:
@@ -20,18 +24,21 @@
 #
 # Sample Usage:  include nginx
 class nginx (
-  $ruby_version = 'ruby-1.9.3-p125',
-  $passenger_version = '3.0.12',
-  $logdir = '/var/log/nginx',
-  $installdir = '/opt/nginx',
-  $www    = '/var/www' ) {
+  $ruby_version      = 'ruby-1.9.3-p392',
+  $passenger_version = '3.0.19',
+  $logdir            = '/var/log/nginx',
+  $installdir        = '/opt/nginx',
+  $www               = '/var/www',
+  $extra_opts        = '--with-ipv6',
+  $user              = 'www-data',
+  $group             = 'www-data',
+) {
 
-    $options = "--auto --auto-download  --prefix=${installdir}"
-    $passenger_deps = [ 'libcurl4-openssl-dev' ]
+    $options = "--auto --auto-download  --prefix=${installdir} --with-http_ssl_module ${extra_opts}"
 
     include rvm
     
-    if !defined( Package[$passenger_deps] ) {   package { $passenger_deps: ensure => present } }
+    if !defined( Package['libcurl4-openssl-dev'] ) {   package { 'libcurl4-openssl-dev': ensure => present } }
 
     rvm_system_ruby {
       $ruby_version:
@@ -45,15 +52,15 @@ class nginx (
     }
 
     exec { 'create container':
-      command => "/bin/mkdir ${www} && /bin/chown www-data:www-data ${www}",
-      unless  => "/usr/bin/test -d ${www}",
+      command => "mkdir -p ${www} && chown ${user}:${group} ${www}",
+      unless  => "test -d ${www}",
       before  => Exec['nginx-install']
     }
 
     exec { 'nginx-install':
-      command => "/bin/bash -l -i -c \"/usr/local/rvm/gems/${ruby_version}/bin/passenger-install-nginx-module ${options}\"",
+      command => "bash -l -i -c \"/usr/local/rvm/gems/${ruby_version}/bin/passenger-install-nginx-module ${options}\"",
       group   => 'root',
-      unless  => "/usr/bin/test -d ${installdir}",
+      unless  => "test -d ${installdir}",
       require => [ Package[$passenger_deps], Rvm_system_ruby[$ruby_version], Rvm_gem["${ruby_version}/passenger"]];
     }
 
@@ -68,8 +75,8 @@ class nginx (
 
     exec { 'create sites-conf':
       path    => ['/usr/bin','/bin'],
-      unless  => "/usr/bin/test -d  ${installdir}/conf/sites-available && /usr/bin/test -d ${installdir}/conf/sites-enabled",
-      command => "/bin/mkdir  ${installdir}/conf/sites-available && /bin/mkdir ${installdir}/conf/sites-enabled",
+      unless  => "test -d  ${installdir}/conf/sites-available && test -d ${installdir}/conf/sites-enabled",
+      command => "mkdir  ${installdir}/conf/sites-available && mkdir ${installdir}/conf/sites-enabled",
       require => Exec['nginx-install'],
     }
 
