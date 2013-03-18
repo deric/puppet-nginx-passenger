@@ -37,8 +37,18 @@ define nginx::vhost(
   $rails_env = 'production',
   $user      = 'www-data',
   $group     = 'www-data',
+  $template  = '',
 ){
   include nginx
+
+  if $template != '' {
+    $erb = "${template}"
+  }else {
+    $erb =  $rails ? {
+      true     => 'nginx/vhost.rails.erb',
+      default  => 'nginx/vhost.erb',
+    }
+  }
 
   if $makeroot{
     file { $root:
@@ -50,18 +60,13 @@ define nginx::vhost(
     }
   }
 
-  $template =  $rails ? {
-    true    => 'vhost.rails.erb',
-    default => 'vhost.erb',
-  }
-
   file { $host:
     ensure  => present,
     path    => "${nginx::installdir}/conf/sites-available/${host}",
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    content => template("nginx/${template}"),
+    content => template("${erb}"),
     require => Class['nginx'],
   }
 

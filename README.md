@@ -63,12 +63,32 @@ nginx::vhost { 'www.example.com':
 ```
 The _rails_ attribute is optional and set to false by default. However, if you want to deploy a rails app, use this attribute and the rails template will be used instead.
 
+### Custom templates
+
+When `template` variable is provided (no matter if `rails` is true or false) custom template will be used.
+
+```
+nginx::vhost { 'www.example.com':
+  port      => '80',
+  template  => '/etc/puppet/templates/myserver.nginx.erb',
+  root      => '/var/www/example',
+}
+```
+
+
 ### Supported systems
 
 This module has been tested on:
 
   - Debian Squeeze 6.0.5, Puppet 3.1.0
 
+required packages:
+  
+  - make
+  - gcc
+  - libcurl4-openssl-dev 
+
+so, porting to other OS shouldn't be difficult.
 
 For custom types, do not forget to enable pluginsync:
 
