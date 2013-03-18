@@ -13,6 +13,10 @@
 #       True or false, allows to create the path for the virtual host
 #   $rails
 #       True or false, sets if the application is rails based or not.
+#   $user
+#       Owner of host directory
+#   $group
+#       Group of host directory
 # Actions:
 #       Creates a virtual host
 #
@@ -31,14 +35,16 @@ define nginx::vhost(
   $makeroot  = true,
   $rails     = false,
   $rails_env = 'production',
+  $user      = 'www-data',
+  $group     = 'www-data',
 ){
   include nginx
 
   if $makeroot{
     file { $root:
       ensure  => directory,
-      owner   => 'www-data',
-      group   => 'www-data',
+      owner   => $user,
+      group   => $group,
       mode    => '0755',
       require => Class['nginx'],
     }
