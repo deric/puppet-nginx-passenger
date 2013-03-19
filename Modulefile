@@ -8,4 +8,4 @@ description 'Module for configuration of Nginx and Passenger'
 project_page 'https://github.com/deric/puppet-nginx-passenger'
 
 ## Add dependencies, if any:
-dependency 'blt04/puppet-rvm'
+#dependency 'blt04/puppet-rvm'
