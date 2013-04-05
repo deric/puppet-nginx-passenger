@@ -63,8 +63,8 @@ define nginx::vhost(
   file { $host:
     ensure  => present,
     path    => "${nginx::installdir}/conf/sites-available/${host}",
-    owner   => 'root',
-    group   => 'root',
+    owner   => $user,
+    group   => $group,
     mode    => '0644',
     content => template("${erb}"),
     require => Class['nginx'],
