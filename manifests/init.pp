@@ -24,8 +24,9 @@
 #
 # Sample Usage:  include nginx
 class nginx (
-  $ruby_version      = 'ruby-1.9.3-p392',
-  $passenger_version = '3.0.19',
+  $ruby_version      = 'ruby-2.0.0-p0',
+  $passenger_version = '4.0.1',
+  $passenger_path    = '',
   $logdir            = '/var/log/nginx',
   $installdir        = '/opt/nginx',
   $www               = '/var/www',
