@@ -38,6 +38,7 @@ define nginx::vhost(
   $user      = 'www-data',
   $group     = 'www-data',
   $template  = '',
+  $auth_basic_file = '',
 ){
   include nginx
 
